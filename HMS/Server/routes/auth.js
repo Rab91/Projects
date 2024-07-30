@@ -1,10 +1,10 @@
 import express from "express";
 //import controllers
-import {signup,login,verifyEmail} from "../controllers/auth.js"
+import {signup,login,verifyEmail,changePassword,updateDetails} from "../controllers/auth.js"
 import {body}from "express-validator"
 
 //middlewares
-import {ValidateBodyData}from "../middlewares/auth.js"
+import {isLoggedIn, ValidateBodyData}from "../middlewares/auth.js"
 
 const router = express.Router();
 router.post("/signup",
@@ -21,5 +21,14 @@ router.post("/login",
     login);
     
 router.get("/verify-account/:token",verifyEmail)
+
+router.put("/password",
+    body("currentPassword").exists().withMessage("Current Password is required"),
+    body("newPassword").exists().isStrongPassword().withMessage("New Password is required"),
+    ValidateBodyData,
+    isLoggedIn,
+    changePassword)
+
+router.put("/profile",isLoggedIn,updateDetails)
 
 export default router;

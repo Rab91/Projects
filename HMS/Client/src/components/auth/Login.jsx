@@ -8,12 +8,12 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [email,setEmail]= useState("");
-  const [password,setPassword]= useState("")
+  const [email,setEmail]= useState("rabianuzha@gmail.com");
+  const [password,setPassword]= useState("H@j@r@_2021&&**")
 
   console.log(email,password)
 
-  const {authloading,autherror,loginsucess}=useSelector(state=>state)
+  const {authloading,autherror,loginsuccess}=useSelector(state=>state)
   const dispatch = useDispatch();
   const handleLogin = ()=>{
     //dispatch the action
@@ -28,11 +28,11 @@ const Login = () => {
 
   const navigate = useNavigate();
   useEffect(()=>{
-    if(loginsucess == true){
+    if(loginsuccess == true){
       // redirect to home page
       navigate("/patient-dashboard")
     }
-  },[loginsucess])
+  },[loginsuccess])
   return (
     <div>
        <img className='vh-100 vw-100'

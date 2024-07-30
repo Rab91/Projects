@@ -14,7 +14,7 @@ const Signup = () => {
   const [lastname,setLastName]= useState("");
 
   const dispatch = useDispatch();
-  const {authloading,autherror,signupsucess}= useSelector(state=>state)
+  const {authloading,autherror,signupsuccess}= useSelector(state=>state)
 
   const handleSignup = ()=>{
     dispatch(signupAction({firstname,lastname,email,password,gender}))
@@ -28,11 +28,11 @@ const Signup = () => {
 
   const navigate = useNavigate();
   useEffect(()=>{
-    if(signupsucess == true){
+    if(signupsuccess == true){
       // redirect to login page
       navigate("/")
     }
-  },[signupsucess])
+  },[signupsuccess])
   return (
     <div className='d-flex justify-content-evenly'>
       <img 
@@ -86,9 +86,9 @@ const Signup = () => {
         value={gender}
         onChange={(e)=>setGender(e.currentTarget.value)}
         className="form-select">
-          <option value="1">Female</option>
-          <option value="2">Male</option>
-          <option value="3">Others</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+          <option value="others">Others</option>
         </select>
         </div>
         <div className="mb-3 form-check">

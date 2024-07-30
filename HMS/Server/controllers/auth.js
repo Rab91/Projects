@@ -71,7 +71,7 @@ const login = async(req,res)=>{
             const token = jwt.sign({
                 _id: user._id,
               }, process.env.JWT_SECRET, { expiresIn: '1h' });
-              return res.status(200).json({sucess: true, token: token})
+              return res.status(200).json({success: true, token: token})
            }
         });
     }
@@ -91,4 +91,67 @@ async function verifyEmail(req,res){
       }
     
 }
-export {signup,login,verifyEmail};
+const changePassword = async(req,res)=>{
+    try{
+        const{currentPassword,newPassword}= req.body;
+
+        //find the account
+        const userId = req.user._id
+        const userAccount = await User.findById(userId)
+        if(!userAccount){
+            return sendJsonResponse(400,false,"No details exists",res)
+        }
+        // validate the current password
+        bcrypt.compare(currentPassword, userAccount.password, function(err, result) {
+            if(!result){
+             return sendJsonResponse(400,false,"Invalid Password",res)
+            }
+            else{
+                //update password
+                bcrypt.hash(newPassword,10, async function(err, hash) {
+                    // create account
+                    userAccount.password = hash;
+                    await userAccount.save();
+
+                    return sendJsonResponse(200,true,"Password Updated",res)
+
+                });
+            }
+         });
+
+    }
+    catch{
+        return sendJsonResponse(500,false, err.message,res);
+    }
+}
+
+const updateDetails = async(req,res)=>{
+    try{
+        const {name,phone,about, street,city,state,zip} = req.body
+        //find the account
+        const userId = req.user._id
+        const userAccount = await User.findById(userId)
+        if(!userAccount){
+            return sendJsonResponse(400,false,"No details exists",res)
+        }
+
+        //update details
+        userAccount.name = name
+        userAccount.phone = phone
+        userAccount.about = about
+        userAccount.address = {
+            state: state,
+            street: street,
+            city: city,
+            zip: zip,
+        }        
+        await userAccount.save()
+        return sendJsonResponse(200,true,"Details Updated",res)
+
+    }
+    catch{
+        return sendJsonResponse(500,false, err.message,res);
+    }
+}
+
+export {signup,login,verifyEmail,changePassword,updateDetails};
