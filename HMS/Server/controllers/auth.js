@@ -71,7 +71,20 @@ const login = async(req,res)=>{
             const token = jwt.sign({
                 _id: user._id,
               }, process.env.JWT_SECRET, { expiresIn: '1h' });
-              return res.status(200).json({success: true, token: token})
+
+              const newUserResponse = {
+                name: user?.name,
+                email: user?.email,
+                profilePic:user?.profilePic,
+                phone: user?.phone || "",
+                about: user?.about || "",
+                street: user?.address.street || "",
+                city: user?.address.city || "",
+                state: user?.address.state || "",
+                zip: user?.address.zip || "",
+                token: token
+              }
+              return res.status(200).json({success: true,user:newUserResponse})
            }
         });
     }
@@ -127,7 +140,7 @@ const changePassword = async(req,res)=>{
 
 const updateDetails = async(req,res)=>{
     try{
-        const {name,phone,about, street,city,state,zip} = req.body
+        const {phone,about, street,city,state,zip} = req.body
         //find the account
         const userId = req.user._id
         const userAccount = await User.findById(userId)
@@ -136,7 +149,6 @@ const updateDetails = async(req,res)=>{
         }
 
         //update details
-        userAccount.name = name
         userAccount.phone = phone
         userAccount.about = about
         userAccount.address = {
@@ -153,5 +165,46 @@ const updateDetails = async(req,res)=>{
         return sendJsonResponse(500,false, err.message,res);
     }
 }
+const uploadImage = async(req,res)=>{
+    console.log("update file route hit")
+    //if file is uploaded or not
+    
+    if(req.file && req.file.location){
+        //get id
+        const userId = req.user._id
+        const userAccount = await User.findById(userId)
+        
+        userAccount.profilePic= req.file.location;
+        await userAccount.save();
+        return sendJsonResponse(200,true,"Profile photo updated",res);
 
-export {signup,login,verifyEmail,changePassword,updateDetails};
+    }
+    else{
+        return sendJsonResponse(500,false,"No file found",res);
+    }
+
+}
+const getUserDetails = async(req,res)=>{
+    try{
+        const userId = req.user._id
+        const user = await User.findById(userId)
+        
+        const newUserResponse = {
+            name: user?.name,
+            email: user?.email,
+            profilePic:user?.profilePic,
+            phone: user?.phone || "",
+            about: user?.about || "",
+            street: user?.address.street || "",
+            city: user?.address.city || "",
+            state: user?.address.state || "",
+            zip: user?.address.zip || "",
+          }
+          return res.status(200).json({success: true,user:newUserResponse})
+    }
+    catch{
+        return sendJsonResponse(500,false,"No file found",res);
+
+    }
+}
+export {signup,login,verifyEmail,changePassword,updateDetails,uploadImage,getUserDetails};

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email,setEmail]= useState("rabianuzha@gmail.com");
-  const [password,setPassword]= useState("H@j@r@_2021&&**")
+  const [password,setPassword]= useState("R@bi@123456&&")
 
   console.log(email,password)
 

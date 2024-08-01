@@ -1,8 +1,8 @@
 import express from "express";
 //import controllers
-import {signup,login,verifyEmail,changePassword,updateDetails} from "../controllers/auth.js"
+import {signup,login,verifyEmail,changePassword,updateDetails, uploadImage, getUserDetails} from "../controllers/auth.js"
 import {body}from "express-validator"
-
+import { upload } from "../middlewares/multer.js";
 //middlewares
 import {isLoggedIn, ValidateBodyData}from "../middlewares/auth.js"
 
@@ -29,6 +29,13 @@ router.put("/password",
     isLoggedIn,
     changePassword)
 
+router.post("/profile-photo",
+    isLoggedIn,
+    upload.single("profilepic"),
+    uploadImage)
+
 router.put("/profile",isLoggedIn,updateDetails)
+
+router.get("/details",isLoggedIn,getUserDetails)
 
 export default router;

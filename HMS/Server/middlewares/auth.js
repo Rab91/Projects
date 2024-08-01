@@ -11,7 +11,7 @@ const ValidateBodyData = (req,res,next)=>{
     return res.status(400).json({success: false,message:result.array()[0]['msg'] });
 }
 
-const isLoggedIn = (req,res)=>{
+const isLoggedIn = (req,res,next)=>{
     console.log(req.headers)
     try {
         const token = req.headers["authorization"]

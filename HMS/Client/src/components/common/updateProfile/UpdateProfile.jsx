@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { updateDetailsAction, updatePasswordAction } from "../../../redux/slices/authSlice";
+import React, { useEffect, useState,useRef } from "react";
+import { updateDetailsAction, updatePasswordAction,fetchDetails } from "../../../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -8,16 +8,18 @@ const UpdateProfile = () => {
     const [newPassword,setNewPassword]= useState("");
     const [confirmPassword,setConfirmPassword]= useState("");
 
-    const [name,setName] = useState("");
-    const [phone,setPhone] = useState("");
-    const [about,setAbout] = useState("");
-    const [city,setCity]= useState("");
-    const [state,setState]= useState("");
-    const [zip,setZip]= useState("");
-    const [street,setStreet]= useState("");
+    const {authloading,autherror,user}= useSelector(state=>state);
+
+    const [phone,setPhone] = useState(user?.phone);
+    const [about,setAbout] = useState(user?.about);
+    const [city,setCity]= useState(user?.city);
+    const [state,setState]= useState(user?.state);
+    const [zip,setZip]= useState(user?.zip);
+    const [street,setStreet]= useState(user?.street);
+
+    console.log(user)
 
     const dispatch = useDispatch();
-    const {authloading,autherror,user}= useSelector(state=>state);
 
     const handlePasswordUpdate = (e)=>{
         e.preventDefault();
@@ -26,14 +28,11 @@ const UpdateProfile = () => {
         }else{
             toast.error("Password are not matching")
         }
-       
-        //console.log(currentPassword,newPassword,confirmPassword);
-    }
+        }
 
     const handleUpdateDetails =(e)=>{
         e.preventDefault();
         dispatch(updateDetailsAction({
-            name,
             phone,
             about,
             street,
@@ -42,32 +41,65 @@ const UpdateProfile = () => {
             zip, 
             token: user.token,
         }))
+       
     }
     useEffect(()=>{
         if(autherror != null && autherror == "Details updated"){
             toast.success = "Details updated"
+            dispatch(fetchDetails({token: user.token}))
+
         }
         else autherror !=null;{
             toast.error(autherror)
         }
     },[autherror])
+    console.log(authloading);
+
+    const updateProfilePhoto =(file)=>{
+        let data = new FormData();
+        data.append("profilepic", file);
+
+        fetch("http://localhost:8000/auth/profile-photo", {
+        method: "POST",
+        headers: {
+            Authorization: user.token,
+        },
+        body: data,
+        })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          toast.success("Image updated");
+          dispatch(fetchDetails({token: user.token}))
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((err) => toast.error(err.message));
+    }
+
+    const inputRef = useRef(null);
 
     return (
         <div className="col">
-            <div className="d-flex justify-content-around">
+            <div className="d-flex justify-content-between mt-2">
                 <div className="flex-column">
                     <h5 className="text-color">Profile</h5>
-                    <h5>Rabia</h5>
-                    <h6>rabianuzha@gmail.com</h6>
+                    <img onClick={()=>inputRef.current.click()}
+                    src={user?.profilePic}
+                    />
+                    <input
+                    style={{display: 'none'}}
+                    ref={inputRef}
+                    onChange={(e)=>updateProfilePhoto(e.currentTarget.files[0])}
+                    type="file"
+                    accept="image/png, image/jpeg"
+                    />
+                    <h5 className="mt-2">{user?.name}</h5>
+                    <h6>{user?.email}</h6>
                     <hr />
-                    <div className="form-outline">
-                        <label className="form-label text-color">About</label>
-                        <input 
-                        required
-                        onChange={(e)=>setAbout(e.currentTarget.value)}
-                        type="text" 
-                        className="form-control" />
-                    </div>
+                    <h5 className="text-color">About</h5>
+                    <h6>{user?.about}</h6>
                 </div>
 
                 <div className="flex-column">
@@ -103,10 +135,10 @@ const UpdateProfile = () => {
                         className="form-control" />
                     </div>
 
-                    <div className="row">
+                    <div className="row m-1">
                         <button 
                         disabled = {authloading == true}
-                        className="btn btn-primary  m-2">
+                        className="btn btn-primary mt-1">
                             {
                                 authloading ? "Please wait..." : "Change Password"
                             }
@@ -119,17 +151,17 @@ const UpdateProfile = () => {
 
             <hr />
             <h5 className="text-color">Personal Details</h5>
+            <form onSubmit={handleUpdateDetails}>
 
             <div className="lead">
-                <form onSubmit={handleUpdateDetails}>
                 <div className="row">
                     <div className="col">
                         {/* Full Name input */}
                         <div className="form-outline">
                             <label className="form-label">Full Name</label>
                             <input 
-                            required
-                            onChange={(e)=>setName(e.currentTarget.value)}
+                            disabled
+                            value={user?.name}
                             type="text" 
                             className="form-control" />
                         </div>
@@ -139,7 +171,11 @@ const UpdateProfile = () => {
                         {/* Email input */}
                         <div className="form-outline">
                             <label className="form-label">Email address</label>
-                            <input type="email" className="form-control" />
+                            <input 
+                            value={user?.email}
+                            disabled
+                            type="email" 
+                            className="form-control" />
                         </div>
                     </div>
 
@@ -150,10 +186,23 @@ const UpdateProfile = () => {
                             <input 
                             required
                             onChange={(e)=>setPhone(e.currentTarget.value)}
+                            value={phone}
                             type="text" 
                             className="form-control" />
                         </div>
-                    </div>        
+                    </div>       
+
+                    <div className="col">
+                    <div className="form-outline">
+                        <label className="form-label">About</label>
+                        <input 
+                        required
+                        onChange={(e)=>setAbout(e.currentTarget.value)}
+                        value={about}
+                        type="text" 
+                        className="form-control" />
+                    </div>
+                    </div> 
 
                 </div>
                 <hr />
@@ -167,6 +216,7 @@ const UpdateProfile = () => {
                             <input 
                             required
                             onChange={(e)=>setStreet(e.currentTarget.value)}
+                            value={street}
                             type="text" 
                             className="form-control" />
                         </div>
@@ -178,6 +228,7 @@ const UpdateProfile = () => {
                             <input 
                             required
                             onChange={(e)=>setCity(e.currentTarget.value)}
+                            value={city}
                             type="text" 
                             className="form-control" />
                         </div>
@@ -192,6 +243,7 @@ const UpdateProfile = () => {
                             <input 
                             required
                             onChange={(e)=>setState(e.currentTarget.value)}
+                            value={state}
                             type="text" 
                             className="form-control" />
                         </div>
@@ -203,17 +255,22 @@ const UpdateProfile = () => {
                             <input 
                             required
                             onChange={(e)=>setZip(e.currentTarget.value)}
+                            value={zip}
                             type="text" 
                             className="form-control" />
                         </div>
                     </div>
                 </div>
-                </form>
+                
 
                 <div className="row">
-                    <button className="btn btn-primary w-25 m-2">Update</button>
+                    <button 
+                    name="submit"
+                    className="btn btn-primary w-25 m-2">Update</button>
                 </div>
+               
             </div>
+            </form>
             <hr />
         </div>
     );

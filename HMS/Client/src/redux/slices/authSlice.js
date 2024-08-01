@@ -39,18 +39,30 @@ export const updatePasswordAction = createAsyncThunk("updatepassword",async({cur
     })
     return data.json();
 })
-export const updateDetailsAction = createAsyncThunk("updatedetails",async({name,phone,about, street,city,state,zip,token})=>{
-    console.log(currentPassword,newPassword,token)
+export const updateDetailsAction = createAsyncThunk("updatedetails",async({phone,about, street,city,state,zip,token})=>{
     const data = await fetch("http://localhost:8000/auth/profile",{
-        method: "POST",
+        method: "PUT",
         headers: {
             "Content-Type": "application/json",
             Authorization: token,
           },
-        body: JSON.stringify({name,phone,about, street,city,state,zip}),
+        body: JSON.stringify({phone,about, street,city,state,zip}),
     })
     return data.json();
 })
+
+export const fetchDetails = createAsyncThunk("getuserdata",async({token})=>{
+    const data = await fetch("http://localhost:8000/auth/details",{
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+    })
+    return data.json();
+})
+
+
 const authSlice = createSlice({
     name: "auth-slice",
     initialState: {
@@ -70,9 +82,7 @@ const authSlice = createSlice({
         builder.addCase(loginAction.fulfilled,(state,action)=>{
             state.authloading = false;
             if(action.payload.success){
-                state.user = {
-                    token : action.payload.token,
-                }
+                state.user = action.payload.user;
                 state.loginsuccess = true;
 
             }else{
@@ -98,7 +108,10 @@ const authSlice = createSlice({
             state.autherror = null;
             
         })
-        
+        builder.addCase(updateDetailsAction.pending,(state,action)=>{
+            state.authloading = true;
+            state.autherror = null;
+        })
         builder.addCase(updateDetailsAction.fulfilled,(state,action)=>{
             state.authloading = false;
             if(action.payload.success == false){
@@ -106,6 +119,12 @@ const authSlice = createSlice({
             }
             else{
                 state.autherror = "Details updated";
+            }
+        })
+        builder.addCase(fetchDetails.fulfilled,(state,action)=>{
+            state.user ={
+                ...action(state.user),
+                ...action.payload.user
             }
         })
        
