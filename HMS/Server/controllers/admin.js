@@ -23,7 +23,7 @@ const createDoctorAccount = async(req,res)=>{
             return sendJsonResponse(400,false,"Wrong department ID",res)
 
         }
-        console.log("hello", department)
+        console.log("department", department_id)
 
         //autogenerate a password
         let password = uuidv4()

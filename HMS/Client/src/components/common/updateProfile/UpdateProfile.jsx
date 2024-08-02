@@ -8,7 +8,7 @@ const UpdateProfile = () => {
     const [newPassword,setNewPassword]= useState("");
     const [confirmPassword,setConfirmPassword]= useState("");
 
-    const {authloading,autherror,user}= useSelector(state=>state);
+    const {authloading,autherror,user}= useSelector(state=>state.authReducers);
 
     const [phone,setPhone] = useState(user?.phone);
     const [about,setAbout] = useState(user?.about);
@@ -85,7 +85,11 @@ const UpdateProfile = () => {
             <div className="d-flex justify-content-between mt-2">
                 <div className="flex-column">
                     <h5 className="text-color">Profile</h5>
-                    <img onClick={()=>inputRef.current.click()}
+                    <img     
+                    width={70}        
+                    height={70}        
+                    className="rounded-circle"
+                    onClick={()=>inputRef.current.click()}
                     src={user?.profilePic}
                     />
                     <input

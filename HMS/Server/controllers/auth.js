@@ -98,7 +98,6 @@ async function verifyEmail(req,res){
         var decoded = jwt.verify(token, 'process.env.JWT_SECRET');
         await User.findByIdAndUpdate(decoded._id,{emailVerified: true})
         return sendJsonResponse(200,true,"your email is verified",res)
-        console.log(decoded)
       } catch(err) {
         return sendJsonResponse(400,false,"Invalid Link",res)
       }
@@ -166,7 +165,6 @@ const updateDetails = async(req,res)=>{
     }
 }
 const uploadImage = async(req,res)=>{
-    console.log("update file route hit")
     //if file is uploaded or not
     
     if(req.file && req.file.location){

@@ -1,6 +1,7 @@
 import React from "react";
 import "../../App.css";
 import UpdateProfile from "../common/updateProfile/updateProfile";
+import DoctorsTab from "./DoctorsTab";
 
 const PatientDashboard = () => {
     return (
@@ -81,7 +82,7 @@ const PatientDashboard = () => {
                         </div>
                     </div>
 
-                    <UpdateProfile />
+                    <DoctorsTab />
                 </div>
             </div>
         </div>

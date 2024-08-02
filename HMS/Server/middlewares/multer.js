@@ -14,10 +14,10 @@ aws.config.update({
 const myBucket = new aws.S3();
 
 export const upload = multer({
-    Storage: multers3({
+        storage: multers3({
         s3: myBucket,
         acl: "public-read",
-        bucket: "mybucket-s3-storage",
+        bucket: "mybucket2498",
         contentType: multers3.AUTO_CONTENT_TYPE,
         key: (req, file, cb) => {
         cb(null, file.originalname);

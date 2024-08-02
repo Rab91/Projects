@@ -13,7 +13,8 @@ const Login = () => {
 
   console.log(email,password)
 
-  const {authloading,autherror,loginsuccess}=useSelector(state=>state)
+  const {authloading,autherror,loginsuccess}=useSelector(state=>state.authReducers)
+
   const dispatch = useDispatch();
   const handleLogin = ()=>{
     //dispatch the action

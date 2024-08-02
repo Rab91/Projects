@@ -31,7 +31,7 @@ app.use("/admin",isLoggedIn,adminRoutes);
 
 app.use("/doctor",isLoggedIn,isDoctor,doctorRoutes)
 
-app.use("/patient",isPatient,patientRoutes)
+app.use("/patient",isLoggedIn,isPatient,patientRoutes)
 
 //connect to db
 mongoose.connect(process.env.DB_URL)
