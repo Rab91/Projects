@@ -48,4 +48,5 @@ const UserSchema = new mongoose.Schema({
     }
 
 })
+UserSchema.index({name:"text",email:"text"})
 export default mongoose.model("HMSUsers",UserSchema)

@@ -16,6 +16,7 @@ const createDoctorAccount = async(req,res)=>{
         {
             return sendJsonResponse(400,false,"Email already in use",res)
         }
+        console.log("department", department_id)
 
         //check if department id is valid or not
         const department = await Department.findById(department_id)
@@ -23,7 +24,6 @@ const createDoctorAccount = async(req,res)=>{
             return sendJsonResponse(400,false,"Wrong department ID",res)
 
         }
-        console.log("department", department_id)
 
         //autogenerate a password
         let password = uuidv4()
@@ -37,6 +37,7 @@ const createDoctorAccount = async(req,res)=>{
             gender,
             name,
             emailVerified: true,
+            departmentId: department_id,
             role: "doctor"
         });
         await newUser.save();

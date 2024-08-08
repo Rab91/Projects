@@ -2,7 +2,7 @@ import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
-const UserCard = ({name,email,pic,address,bio}) => {
+const UserCard = ({name,email,pic,address,bio,department}) => {
   return (
     <div>
         <div className="row row-cols-1 row-cols-md-3 g-1">
@@ -38,11 +38,16 @@ const UserCard = ({name,email,pic,address,bio}) => {
                                 
                             </div>
                         </div>
+
                         <div className="card-body text-color">
                             <h6 className="card-title">Bio</h6>
-                            <p className="card-text">
-                               {bio}
-                            </p>
+                            {
+                                bio && <p className="card-text">{bio}</p>
+                            }
+                          
+                            {
+                                department && <p className="card-text">Department:{department}</p>
+                            }
                             <div className="d-flex gap-1">
                                 <a href="#" className="btn btn-primary">
                                     Message

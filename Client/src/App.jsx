@@ -7,13 +7,15 @@ import Signup from './components/auth/Signup'
 import PatientDashboard from './components/patients/PatientDashboard'
 import PatientWrapper from './components/auth/PatientWrapper'
 import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
-  
+import 'react-toastify/dist/ReactToastify.css';
+import { HMSContext } from '../HMSContext'
 function App() {
 
+  const [option,setOption]= useState("updateprofile")
   return (
     <>
      <div>
+      <HMSContext.Provider value={{option,setOption}}>
         <Navbar/>
         <ToastContainer />
         <Routes>
@@ -27,6 +29,7 @@ function App() {
             }/>
 
         </Routes>
+        </HMSContext.Provider>
      </div>
     </>
   )

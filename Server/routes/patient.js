@@ -7,5 +7,5 @@ import {fetchAllDepartments, fetchAllDoctors, filterDoctorByDepartment}from "../
 router.get("/all-doctors",fetchAllDoctors)
 router.get("/all-departments",fetchAllDepartments)
 
-router.get("/filter-doctors/:name/:departmentId",filterDoctorByDepartment)
+router.get("/filter-doctors",filterDoctorByDepartment)
 export default router;

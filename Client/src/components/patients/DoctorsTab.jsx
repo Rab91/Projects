@@ -23,7 +23,7 @@ const DoctorsTab = () => {
     const handleFilter =(e)=>{
         e.preventDefault();
         console.log(name,department);
-        dispatch(filterDoctors({name,department,token:user.token}))
+        dispatch(filterDoctors({name,departmentId:department,token:user.token}))
     }
     return (
         <div className="mt-3">
@@ -41,12 +41,12 @@ const DoctorsTab = () => {
                 <div className="form-group">
                 <label>Choose department</label>
                 <select 
-                onChange={(e)=>setDepartment(e.currentTarget.department)}
+                onChange={(e)=>setDepartment(e.currentTarget.value)}
                 value={department}
                 className="form-select">
-                    <option value="">All Departments</option>
+                    <option value="all">All Departments</option>
                     {
-                        departments.map((item,index)=>{
+                        departments?.map((item,index)=>{
                             <div>
                                 <option key={index} value={item._id}>{item.name}</option>
                             </div>
@@ -62,10 +62,10 @@ const DoctorsTab = () => {
          </form>
             <div>
             <div className="row mt-2">
-            {doctors && doctors.length == 0 && (
+            { doctors?.length == 0 && (
                 <p className="text-center">No doctors found !</p>
             )}
-            {doctors.map((item, index) => (
+            {doctors?.map((item, index) => (
             <div key={index} className="col col-4">
                 <UserCard
                 bio={item.about}
@@ -73,6 +73,7 @@ const DoctorsTab = () => {
                 email={item.email}
                 address={item?.address}
                 pic={item.profilePic}
+                department={item?.departmentId?.name}
                 />
             </div>
             ))}

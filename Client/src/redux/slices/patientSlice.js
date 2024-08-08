@@ -23,7 +23,7 @@ export const getAllDepartmentsAction = createAsyncThunk("getAllDepartments",asyn
     return data.json();
 })
 export const filterDoctors = createAsyncThunk("getFilterDoctors",async({name,departmentId,token})=>{
-    const data = await fetch(`http://localhost:8000/patient/filter-doctors/${name}/${departmentId}`,{
+    const data = await fetch(`http://localhost:8000/patient/filter-doctors?name=${name}&departmentId=${departmentId}`,{
         method: "GET",
         headers: {
             "Content-Type": "application/json",

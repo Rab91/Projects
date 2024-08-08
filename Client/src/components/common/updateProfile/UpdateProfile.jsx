@@ -82,7 +82,7 @@ const UpdateProfile = () => {
 
     return (
         <div className="col">
-            <div className="d-flex justify-content-between mt-2">
+            <div className="d-flex  mt-2 gap-5">
                 <div className="flex-column">
                     <h5 className="text-color">Profile</h5>
                     <img     
