@@ -2,10 +2,20 @@ import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
-const UserCard = ({name,email,pic,address,bio,department}) => {
+const UserCard = ({
+    name,
+    email,
+    pic,
+    address,
+    bio,
+    department,
+    fetchSlotDoctors,
+    id,
+    isSlotButtonRequired = true,
+}) => {
   return (
     <div>
-        <div className="row row-cols-1 row-cols-md-3 g-1">
+        <div className="row row-cols-1 row-cols-md-3 g-1 m-1">
                 <div className="col">
                     <div className="card border-primary h-100" style={{width: '18rem'}}>
                         <div className="card-header">{name}</div>
@@ -52,9 +62,14 @@ const UserCard = ({name,email,pic,address,bio,department}) => {
                                 <a href="#" className="btn btn-primary">
                                     Message
                                 </a>
-                                <a href="#" className="btn btn-primary">
-                                    Appointment
-                                </a>
+                                {
+                                    isSlotButtonRequired == true && ( <a href="#" 
+                                        onClick={()=>fetchSlotDoctors(id)}
+                                        className="btn btn-primary">
+                                            View Available Slots
+                                        </a>)
+                                }
+                               
                             </div>
                         </div>
                     </div>

@@ -8,12 +8,12 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [email,setEmail]= useState("rabianuzha@gmail.com");
-  const [password,setPassword]= useState("R@bi@123456&&")
+  const [email,setEmail]= useState("rabianuzha12@gmail.com");
+  const [password,setPassword]= useState("4d271eae-fefc-4819-bccd-40898422ba7f")
 
   console.log(email,password)
 
-  const {authloading,autherror,loginsuccess}=useSelector(state=>state.authReducers)
+  const {authloading,autherror,loginsuccess,user}=useSelector(state=>state.authReducers)
 
   const dispatch = useDispatch();
   const handleLogin = ()=>{
@@ -30,8 +30,11 @@ const Login = () => {
   const navigate = useNavigate();
   useEffect(()=>{
     if(loginsuccess == true){
-      // redirect to home page
-      navigate("/patient-dashboard")
+      if (user && user.role == "doctor") 
+        navigate("/doctor-dashboard");
+      else if (user && user.role == "patient") 
+        navigate("/patient-dashboard");
+
     }
   },[loginsuccess])
   return (

@@ -27,7 +27,7 @@ const createDoctorAccount = async(req,res)=>{
 
         //autogenerate a password
         let password = uuidv4()
-
+        console.log(password)
         // hash password
         bcrypt.hash(password,10, async function(err, hash) {
         //create account

@@ -1,0 +1,8 @@
+doctor:
+
+email: rabianuzha12@gmail.com
+password: 4d271eae-fefc-4819-bccd-40898422ba7f
+
+patient:
+email: rabianuzha@gmail.com
+password: R@bi@123456&&

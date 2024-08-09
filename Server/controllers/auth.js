@@ -82,7 +82,8 @@ const login = async(req,res)=>{
                 city: user?.address.city || "",
                 state: user?.address.state || "",
                 zip: user?.address.zip || "",
-                token: token
+                token: token,
+                role:user.role
               }
               return res.status(200).json({success: true,user:newUserResponse})
            }
