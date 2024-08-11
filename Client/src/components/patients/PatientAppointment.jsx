@@ -68,7 +68,7 @@ const PatientAppoinment = () => {
         startAccessor="start"
         endAccessor="end"
         events={events}
-        onSelectedEvent={handleBookSlots}
+        onSelectEvent={handleBookSlots}
         style={{ height: 500, margin: '50px' }}
       />
        <div>

@@ -69,7 +69,7 @@ const DoctorAppoinment = () => {
             console.log(data)
             let temp = []
             for (let item of data.slots){
-                item["title"] = item.isBooked ? "Booked": "Available";
+                item["title"] = item.isBooked ? item?.bookedBy?.name: "Available";
                 item["allDay"] = false;
                 item["start"]=new Date(item["start"])
                 item["end"]=new Date(item["end"])

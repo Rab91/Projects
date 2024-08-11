@@ -6,7 +6,7 @@ const fetchAllPatients = async(req,res)=>{
     try{
         const patients = await User.find({role:"patient"})
         .select("name email profilePic about address");
-        return res.status(200).json({sucess:true,patients})
+        return res.status(200).json({success:true,patients})
     }
     catch(err){
         return sendJsonResponse(500,false,err.message,res)
@@ -19,7 +19,7 @@ const searchPatients = async(req,res)=>{
             role: "patient",
             $text: { $search: query },
           }).select("name email profilePic about address");
-          return res.status(200).json({sucess:true,patients})
+          return res.status(200).json({success:true,patients})
 
     }
     catch(err){
