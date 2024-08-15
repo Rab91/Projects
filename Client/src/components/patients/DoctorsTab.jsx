@@ -27,6 +27,8 @@ const localizer = dateFnsLocalizer({
     locales,
 });
 
+import { BASE_URL } from "../../../config";
+
 const DoctorsTab = () => {
     const { doctors, departments, loading, error } = useSelector(
         (state) => state.patientReducers
@@ -53,7 +55,7 @@ const DoctorsTab = () => {
     };
     const [events, setEvents] = useState([]);
     const fetchSlotDoctors = (doctorId) => {
-        fetch(`http://localhost:8000/patient/doctor-slots/${doctorId}`, {
+        fetch(`${BASE_URL}/patient/doctor-slots/${doctorId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -90,7 +92,7 @@ const DoctorsTab = () => {
         popupRef.current.click();
     };
     const bookSlots = ()=>{
-        fetch(`http://localhost:8000/patient/book-slot/${clickSlot._id}`, {
+        fetch(`${BASE_URL}/patient/book-slot/${clickSlot._id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

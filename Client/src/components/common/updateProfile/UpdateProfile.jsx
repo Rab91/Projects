@@ -59,7 +59,7 @@ const UpdateProfile = () => {
         let data = new FormData();
         data.append("profilepic", file);
 
-        fetch("http://localhost:8000/auth/profile-photo", {
+        fetch(`${BASE_URL}/auth/profile-photo`, {
         method: "POST",
         headers: {
             Authorization: user.token,

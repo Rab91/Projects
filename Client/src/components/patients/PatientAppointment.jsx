@@ -6,6 +6,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../../../config';
 const locales = {
     'en-US': enUS,
   };
@@ -24,7 +26,7 @@ const PatientAppoinment = () => {
   const [clickSlot,setClickSlot]=useState(null)
 
   const fetchAllSlots = (doctorId) => {
-    fetch(`http://localhost:8000/patient/all-slots`, {
+    fetch(`${BASE_URL}/patient/all-slots`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -60,7 +62,32 @@ const PatientAppoinment = () => {
     setClickSlot(data);
     //open the opoup and read the data
     popupRef.current.click();
-};
+    };
+    const closeRef = useRef()
+    const navigate = useNavigate()
+
+    const startVC = (roomId)=>{
+        // close popup
+        closeRef.current.click()
+       
+        navigate(`/video-call/${roomId}`)
+    }
+    function isSameDateAndLaterTime(givenDate) {
+        const now = new Date();
+    
+        // Check if the year, month, and date are the same
+        const isSameDate =
+          now?.getFullYear() === givenDate?.getFullYear() &&
+          now?.getMonth() === givenDate?.getMonth() &&
+          now?.getDate() === givenDate?.getDate();
+    
+        // Check if the current time is later than the given time
+        const isLaterTime = now?.getTime() > givenDate?.getTime();
+    
+        // Return true only if both conditions are met
+        return isSameDate && isLaterTime;
+      }
+    
   return (
     <div>
         <Calendar
@@ -150,13 +177,20 @@ const PatientAppoinment = () => {
                                 </div>
 
                             </div>
-                                </div>
+                            <button                  
+                                disabled={isSameDateAndLaterTime(clickSlot?.start)!=true}
+                                onClick={()=>startVC(clickSlot?.roomId)}
+                                className="btn btn-primary m-3">
+                                Join Meet
+                            </button>
+                            </div>
                             </div>
                             <div className="modal-footer">
                                 <button
                                     type="button"
                                     className="btn btn-secondary"
                                     data-bs-dismiss="modal"
+                                    ref={closeRef}
                                 >
                                     Close
                                 </button>

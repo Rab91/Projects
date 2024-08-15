@@ -7,6 +7,7 @@ import { logout } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { HMSContext } from "../../../HMSContext";
 import PatientAppointment from "./PatientAppointment";
+import Chat from "../chats/Chat";
 
 const PatientDashboard = () => {
     const  {user}=useSelector(state=>state.authReducers)
@@ -125,7 +126,7 @@ const PatientDashboard = () => {
                             option == "appointments" && <PatientAppointment/>
                         }
                         {
-                            option == "chats" && <h1>Under Development</h1>
+                            option == "chats" && <Chat/>
                         }
                     </div>
                 </div>

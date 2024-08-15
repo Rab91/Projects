@@ -1,9 +1,9 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
-
+import { BASE_URL } from "../../../config";
 //login thunk
 export const loginAction = createAsyncThunk("login",async({email,password})=>{
     console.log(email,password);
-    const data = await fetch("http://localhost:8000/auth/login",{
+    const data = await fetch(`${BASE_URL}/auth/login`,{
         method: "POST",
         body: JSON.stringify({email,password}),
         headers: {
@@ -14,7 +14,7 @@ export const loginAction = createAsyncThunk("login",async({email,password})=>{
 })
 export const signupAction = createAsyncThunk("signup",async({firstname,lastname,email,password,gender})=>{
     console.log(firstname,lastname,email,password,gender);
-    const data = await fetch("http://localhost:8000/auth/signup",{
+    const data = await fetch(`${BASE_URL}/auth/signup`,{
         method: "POST",
         body: JSON.stringify({
             name:firstname +""+lastname,
@@ -29,7 +29,7 @@ export const signupAction = createAsyncThunk("signup",async({firstname,lastname,
 })
 export const updatePasswordAction = createAsyncThunk("updatepassword",async({currentPassword,newPassword,token})=>{
     console.log(currentPassword,newPassword,token)
-    const data = await fetch("http://localhost:8000/auth/password",{
+    const data = await fetch(`${BASE_URL}/auth/password`,{
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -40,7 +40,7 @@ export const updatePasswordAction = createAsyncThunk("updatepassword",async({cur
     return data.json();
 })
 export const updateDetailsAction = createAsyncThunk("updatedetails",async({phone,about, street,city,state,zip,token})=>{
-    const data = await fetch("http://localhost:8000/auth/profile",{
+    const data = await fetch(`${BASE_URL}/auth/profile`,{
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -52,7 +52,7 @@ export const updateDetailsAction = createAsyncThunk("updatedetails",async({phone
 })
 
 export const fetchDetails = createAsyncThunk("getuserdata",async({token})=>{
-    const data = await fetch("http://localhost:8000/auth/details",{
+    const data = await fetch(`${BASE_URL}/auth/details`,{
         method: "GET",
         headers: {
             "Content-Type": "application/json",

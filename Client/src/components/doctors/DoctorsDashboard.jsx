@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { HMSContext } from "../../../HMSContext";
 import PatientsTab from "./PatientsTab";
 import DoctorAppoinment from "./DoctorAppoinment";
+import Chat from "../chats/Chat";
 
 const DoctorsDashboard = () => {
     const  {user}=useSelector(state=>state.authReducers)
@@ -125,7 +126,7 @@ const DoctorsDashboard = () => {
                             option == "appointments" && <DoctorAppoinment/>
                         }
                         {
-                            option == "chats" && <h1>Under Development</h1>
+                            option == "chats" && <Chat/>
                         }
                     </div>
                 </div>

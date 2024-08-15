@@ -5,6 +5,7 @@ import {body}from "express-validator"
 import { upload } from "../middlewares/multer.js";
 //middlewares
 import {isLoggedIn, ValidateBodyData}from "../middlewares/auth.js"
+import { fetchAllMessages } from "../controllers/chat.js";
 
 const router = express.Router();
 router.post("/signup",
@@ -38,4 +39,5 @@ router.put("/profile",isLoggedIn,updateDetails)
 
 router.get("/details",isLoggedIn,getUserDetails)
 
+router.post("/messages",isLoggedIn,fetchAllMessages)
 export default router;

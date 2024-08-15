@@ -22,6 +22,10 @@ const SlotSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    roomId: {
+        type: String,
+        required: true
     }
 })
 export default mongoose.model("HMSSlots",SlotSchema)

@@ -85,7 +85,7 @@ const bookSlot = async(req,res)=>{
 const getAllAppoinments =async(req,res)=>{
     const slots = await Slots.find({
         bookedBy:req.user._id
-    }).populate("openedBy","name email profilePic")
+    }).populate("openedBy","name email profilePic _id")
     return res.status(200).json({success: true,slots})
 
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import Navbar from './components/common/Navbar'
 import { Route, Routes } from 'react-router-dom'
@@ -12,7 +12,10 @@ import { HMSContext } from '../HMSContext'
 import DoctorsDashboard from './components/doctors/DoctorsDashboard'
 import DoctorWrapper from './components/auth/DoctorWrapper'
 import { useSelector } from 'react-redux'
-
+import socket from './socket'
+import VideoCall from './components/common/VideoCall'
+import LoginWrapper from './components/auth/LoginWrapper'
+import { BASE_URL } from '../config'
 function App() {
 
   const [option,setOption]= useState("updateprofile")
@@ -21,7 +24,7 @@ function App() {
 
   const[patients,setPatients]=useState([])
   const fetchAllPatients = ()=>{
-    fetch("http://localhost:8000/doctor/all-patients",{
+    fetch(`${BASE_URL}/doctor/all-patients`,{
       method: "GET",
       headers: {
           "Content-Type": "application/json",
@@ -41,7 +44,7 @@ function App() {
   }
 
   const filterPatients = (query)=>{
-    fetch(`http://localhost:8000/doctor/search-patients?query=${query}`,{
+    fetch(`${BASE_URL}/doctor/search-patients?query=${query}`,{
       method: "GET",
       headers: {
           "Content-Type": "application/json",
@@ -59,10 +62,135 @@ function App() {
   })
   .catch(err=>toast.error(err.message))
   }
+  useEffect(()=>{
+    if(user){
+      socket.connect();
+      return()=>{
+        socket.disconnect();
+      }
+    }
+  },[user])
+  //chat logic
+  const [chatUsers,setChatUsers]= useState([])
+
+  const [receiver,setReceiver]= useState(null)
+  const [messages, setMessages] = useState([]);
+
+  const sendMessage = (message)=>{
+    console.log("Sender",user._id)
+    console.log("Receiver",receiver)
+    console.log("message",message)
+    socket.emit("send-message",{
+      sender: user?._id,
+      receiver: receiver,
+      message: message
+    })
+  }
+  const sendFile = (file)=>{
+    console.log("sending file", file)
+    socket.emit("send-file",{
+      sender: user?._id,
+      receiver: receiver,
+      file: file,
+      filename: file.name,
+    })
+  }
+  //check all chat users
+  const fetchChatUsers = ()=>{
+    let url =""
+    if(user.role == "doctor"){
+      url = `${BASE_URL}/doctor/all-patients`
+    }
+    else if(user.role == "patient"){
+      url =`${BASE_URL}/patient/all-doctors`
+    }
+    fetch(url,{
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": user?.token,
+        },
+    })
+    .then(res=>res.json())
+    .then((data)=>{
+      if(user.role == "doctor"){
+        setChatUsers(data.patients)
+      }
+      else if(user.role == "patient"){
+        setChatUsers(data.doctors)
+      }
+    })
+    .catch((err)=>console.log(err))
+  }
+
+  useEffect(()=>{
+    if(user){
+      socket.connect();
+      fetchChatUsers()
+      return()=>{
+        socket.disconnect();
+      }
+    }
+  },[user])
+  const fetchAllMessages = ()=>{
+    fetch(`${BASE_URL}/auth/messages`,{
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": user?.token,
+        },
+        body: JSON.stringify({
+          receiverId : receiver
+        })
+    })
+    .then(res=>res.json())
+    .then((data)=>{
+        setMessages(data.messages)
+    })
+    .catch((err)=>console.log(err))
+  }
+  useEffect(()=>{
+    if(user && receiver){
+      let combinedId = ""
+      if(user._id > receiver){
+          combinedId = user._id + receiver;
+      }
+      else{
+          combinedId =  receiver + user._id;
+      }
+      //fetch intial messages
+      fetchAllMessages()
+      socket.on(combinedId,(payload)=>{
+        console.log("Received",payload)
+        setMessages((state) => [...state, payload]);
+       // console.log("message recieved from server", payload)
+      })
+      return ()=>{
+        socket.removeListener(combinedId)
+      }
+    }
+  },[])
+
+ // console.log(messages)
+
+  console.log(receiver)
   return (
     <>
      <div>
-      <HMSContext.Provider value={{option,setOption,fetchAllPatients,patients,filterPatients}}>
+      <HMSContext.Provider 
+      value={{
+        option,
+        setOption,
+        fetchAllPatients,
+        patients,
+        filterPatients,
+        chatUsers,
+        setReceiver,
+        receiver,
+        sendMessage,
+        messages,
+        sendFile
+        }}>
         <Navbar/>
         <ToastContainer />
         <Routes>
@@ -80,6 +208,15 @@ function App() {
              <DoctorsDashboard/>
             </DoctorWrapper>
           }/>
+          <Route 
+          path='/video-call/:roomId'
+          element={
+          <LoginWrapper>
+            <VideoCall/>
+          </LoginWrapper>
+          
+        }
+          />
         </Routes>
         </HMSContext.Provider>
      </div>

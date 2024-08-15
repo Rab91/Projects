@@ -55,6 +55,7 @@ const PatientsTab = () => {
                 address={item?.address}
                 pic={item.profilePic}
                 isSlotButtonRequired={false}
+                id = {item._id}
                 />
             </div>
             ))}

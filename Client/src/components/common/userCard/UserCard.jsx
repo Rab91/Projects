@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { HMSContext } from '../../../../HMSContext';
 
 const UserCard = ({
     name,
@@ -13,6 +14,13 @@ const UserCard = ({
     id,
     isSlotButtonRequired = true,
 }) => {
+    const {setOption,setReceiver} = useContext(HMSContext)
+
+    const redirectChat = ()=>{
+        setReceiver(id)
+        // redirect to chat
+        setOption("chats")
+    }
   return (
     <div>
         <div className="row row-cols-1 row-cols-md-3 g-1 m-1">
@@ -59,7 +67,9 @@ const UserCard = ({
                                 department && <p className="card-text">Department:{department}</p>
                             }
                             <div className="d-flex gap-1">
-                                <a href="#" className="btn btn-primary">
+                                <a 
+                                onClick={redirectChat}
+                                href="#" className="btn btn-primary">
                                     Message
                                 </a>
                                 {
