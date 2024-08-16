@@ -169,7 +169,7 @@ function App() {
         socket.removeListener(combinedId)
       }
     }
-  },[])
+  },[user,receiver])
 
  // console.log(messages)
 
