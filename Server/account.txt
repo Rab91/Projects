@@ -3,6 +3,13 @@ doctor:
 email: rabianuzha12@gmail.com
 password: 4d271eae-fefc-4819-bccd-40898422ba7f
 
+email: rabianuzha1@gmail.com
+password:2bb1f5dd-b2e5-493a-917d-5d887bbb07c7
+
 patient:
 email: rabianuzha@gmail.com
 password: R@bi@123456&&
+
+admin:
+email: superadmin@gmail.com
+password: Admin_12345@!&&

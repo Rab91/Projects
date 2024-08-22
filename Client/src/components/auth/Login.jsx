@@ -8,8 +8,8 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [email,setEmail]= useState("rabianuzha12@gmail.com");
-  const [password,setPassword]= useState("4d271eae-fefc-4819-bccd-40898422ba7f")
+  const [email,setEmail]= useState("superadmin@gmail.com");
+  const [password,setPassword]= useState("Admin_12345@!&&")
 
   console.log(email,password)
 
@@ -34,7 +34,8 @@ const Login = () => {
         navigate("/doctor-dashboard");
       else if (user && user.role == "patient") 
         navigate("/patient-dashboard");
-
+      else if(user && user.role == "admin")
+        navigate("/admin-dashboard")
     }
   },[loginsuccess])
   return (

@@ -20,7 +20,8 @@ const UserSchema = new mongoose.Schema({
     },
     emailVerified: {
         type: Boolean,
-        required: false,
+        required: true,
+        default: false
     },
     role: {
         type: String,
@@ -36,7 +37,7 @@ const UserSchema = new mongoose.Schema({
     profilePic:{
         type: String,
         required: true,
-        default:"https://static-00.iconduck.com/assets.00/profile-icon-2048x2048-yj5zf8da.png"
+        default:"https://static.vecteezy.com/system/resources/previews/005/520/145/original/cartoon-drawing-of-a-doctor-vector.jpg"
     },
     phone: String,
     about: String,

@@ -16,6 +16,8 @@ import socket from './socket'
 import VideoCall from './components/common/VideoCall'
 import LoginWrapper from './components/auth/LoginWrapper'
 import { BASE_URL } from '../config'
+import AdminWrapper from './components/auth/AdminWrapper'
+import AdminDashboard from './components/admin/AdminDashboard'
 function App() {
 
   const [option,setOption]= useState("updateprofile")
@@ -120,7 +122,7 @@ function App() {
         setChatUsers(data.doctors)
       }
     })
-    .catch((err)=>console.log(err))
+    .catch((err)=>{console.log(err)})
   }
 
   useEffect(()=>{
@@ -214,8 +216,15 @@ function App() {
           <LoginWrapper>
             <VideoCall/>
           </LoginWrapper>
-          
-        }
+          }
+          />
+          <Route 
+          path='/admin-dashboard'
+          element={
+            <AdminWrapper>
+              <AdminDashboard />
+            </AdminWrapper>
+          }
           />
         </Routes>
         </HMSContext.Provider>

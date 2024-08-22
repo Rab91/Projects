@@ -3,6 +3,7 @@ import { updateDetailsAction, updatePasswordAction,fetchDetails } from "../../..
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
+import { BASE_URL } from "../../../../config";
 const UpdateProfile = () => {
     const [currentPassword,setCurrentPassword]= useState("");
     const [newPassword,setNewPassword]= useState("");
