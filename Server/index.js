@@ -28,7 +28,9 @@ import dotenv from "dotenv"
 //configure env
 dotenv.config();
 
-const PORT = 8000
+//const PORT = 8000
+const Port = process.env.PORT || 8000
+
 const app = express();
 
 //configure middlewares
@@ -49,7 +51,7 @@ app.use("/patient",isLoggedIn,isPatient,patientRoutes)
 //connect to db
 mongoose.connect(process.env.DB_URL)
 .then(()=>{
-    const myapp = app.listen(PORT,()=>console.log("Port running on 8000"))
+    const myapp = app.listen(Port,()=>console.log("Port running on 8000"))
     // start the socket server
     const io = new Server(myapp, {
         cors: {
