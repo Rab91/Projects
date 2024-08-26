@@ -104,6 +104,7 @@ mongoose.connect(process.env.DB_URL)
 
 .catch((err)=>{
     console.log("Failed to connect to DB")
+    console.log(err)
     process.exit();
 })
 
